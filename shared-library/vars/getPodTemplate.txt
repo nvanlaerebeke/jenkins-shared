@@ -1,0 +1,8 @@
+Gets the yaml for one of the following container images:
+
+- buildkit
+- dotnet5
+- dotnet6
+- dotnet7
+- rpmbuild
+- php
