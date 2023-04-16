@@ -7,6 +7,10 @@ def call(String name, String registry, String branch, String registry_secret, St
     buildScript += "    TAG=latest\n"
     buildScript += "fi\n\n"
 
+    buildScript += 'if [ "$GIT_BRANCH" == "main" ]; then \n'
+    buildScript += "    TAG=latest\n"
+    buildScript += "fi\n\n"
+
     buildScript += "mkdir -p ~/.docker \n"
     buildScript += "/bin/cp -f ${registry_secret} ~/.docker/config.json \n"
     

@@ -34,7 +34,8 @@ Used by steps that need to create a helm package and push it to the `oci` regist
 ## Jenkins Configuration
 
 The shared library and credentials need to be added in Jenkins.  
-This is out of scope of these docs, there is enough documentation on google for that.
+
+To add this shared library, see [here](https://www.jenkins.io/doc/book/pipeline/shared-libraries/)
 
 ## Example Jenkinsfile
 
@@ -46,7 +47,7 @@ pipeline{
     REPOSITORY = 'ssh://git@github.com/<user>/<project>'
     REGISTRY = "registry.example.com"
     REGISTRY_HELM = "helm.example.com"
-    CREDENTIAL_ID = '<repository_jenkins_credentail_id>'
+    REPOSITORY_CREDENTIAL_ID = '<repository_jenkins_credentail_id>'
     REGISTRY_SECRET_FILE = credentials('<registry_credential_secret_id>')
     REGISTRY_SECRET_FILE_HELM = credentials('<helm_registry_credential_secret_id>')
     
@@ -67,7 +68,7 @@ pipeline{
       } }
       steps {
         container(name: "buildkit", shell: '/bin/sh') {
-          checkoutAndBuild(env.REPOSITORY, env.CREDENTIAL_ID, env.NAME, env.REGISTRY, env.BRANCH_NAME, env.REGISTRY_SECRET_FILE)
+          checkoutAndBuild(env.REPOSITORY, env.REPOSITORY_CREDENTIAL_ID, env.NAME, env.REGISTRY, env.BRANCH_NAME, env.REGISTRY_SECRET_FILE)
         }
         container(name: "helm", shell: '/bin/sh') {
           sh getHelmBuildScript(env.NAME, env.REGISTRY_HELM, REGISTRY_SECRET_FILE_HELM)
