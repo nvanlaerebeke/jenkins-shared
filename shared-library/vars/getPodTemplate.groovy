@@ -1,9 +1,5 @@
 def call(List<String> containers) {
-    containers.each { string ->
-        println(string)
-    }
-    
-    String yaml = getYaml(name, containers);
+    String yaml = getYaml(containers);
     println "${yaml}"
     return yaml;
 }
