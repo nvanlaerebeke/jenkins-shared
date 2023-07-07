@@ -1,4 +1,8 @@
 def call(List<String> containers) {
+    containers.each { string ->
+        println(string)
+    }
+    
     String yaml = getYaml(name, containers);
     println "${yaml}"
     return yaml;
@@ -30,7 +34,21 @@ spec:''' +
     //getVolumeMounts() +
     getEnvVars()
 }
+def getDotnet5() {
+    return "";
+}
 
+def getDotnet6() {
+    return "";
+}
+
+def getRpmBuild() {
+    return "";
+}
+
+def getPhp() {
+    return "";
+}
 def getBuildKitContainer() {
   return '''
   - name: buildkit
