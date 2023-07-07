@@ -1,33 +1,10 @@
-def call(String template) {
-  def containers = [];
-    String yaml = ""
-
-    switch(template) {
-        case "buildkit_with_helm":
-          containers.add("helm");
-        case 'buildkit':
-          containers.add("buildkit");
-          break;
-        case 'dotnet5':
-            break;
-        case 'dotnet6':
-            break;
-        case 'dotnet7':
-            break;
-        case 'rpmbuild':
-            break;
-        case 'php':
-            break;
-        default:
-          throw new Exception("'${container}' is not a known container type")
-    }
-
-    yaml = getYaml(template, containers);
+def call(List<String> containers) {
+    String yaml = getYaml(name, containers);
     println "${yaml}"
     return yaml;
 }
 
-def getYaml(String name, List<String> containers) {
+def getYaml(List<String> containers) {
   def containersYaml = "";
   for(String container in containers) {
     if(container == "buildkit") {
@@ -36,12 +13,15 @@ def getYaml(String name, List<String> containers) {
     if(container == "helm") {
       containersYaml += getHelmContainer();
     }
+    if(container == "dotnet7") {
+      containersYaml += getDotNet7Container();
+    }
   }
 
     return '''apiVersion: v1
 kind: Pod
 metadata:
-  name: ''' + name + '''
+  name: JenkinsBuildPod
 spec:''' +
     getVolumes() +
 '''
@@ -49,26 +29,6 @@ spec:''' +
     containersYaml +
     //getVolumeMounts() +
     getEnvVars()
-}
-
-def getDotnet5() {
-    return "";
-}
-
-def getDotnet6() {
-    return "";
-}
-
-def getDotnet7() {
-    return "";
-}
-
-def getRpmBuild() {
-    return "";
-}
-
-def getPhp() {
-    return "";
 }
 
 def getBuildKitContainer() {
@@ -119,6 +79,31 @@ def getHelmContainer() {
       periodSeconds: 30
     securityContext:
       privileged: false
+'''
+}
+
+def getDotNet7Container() {
+  return '''
+  - name: dotnet7
+    image: moby/buildkit:master
+    readinessProbe:
+      exec:
+        command:
+          - buildctl
+          - debug
+          - workers
+      initialDelaySeconds: 5
+      periodSeconds: 30
+    livenessProbe:
+      exec:
+        command:
+          - buildctl
+          - debug
+          - workers
+      initialDelaySeconds: 5
+      periodSeconds: 30
+    securityContext:
+      privileged: true  
 '''
 }
 
