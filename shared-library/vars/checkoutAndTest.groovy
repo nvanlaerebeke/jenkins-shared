@@ -8,5 +8,5 @@ def call(String repository, String credentialsId, String name, String registry, 
     ],
     userRemoteConfigs: [[ credentialsId: credentialsId , url: repository ]]
   ]
-  sh getTestScript(name, registry, branch, registry_secret_file, readFile(name + '/VERSION'))
+  sh getTestScript(name)
 }
